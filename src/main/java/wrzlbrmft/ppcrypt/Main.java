@@ -96,6 +96,30 @@ public class Main {
 		helpFormatter.printHelp(getCommandLineSyntax(), getOptions(), true);
 	}
 
+	public static byte[] readFile(String fileName) {
+		LOGGER.info("reading from file '{}'", fileName);
+		try {
+			byte[] data = FileUtils.readFileToByteArray(new File(fileName));
+			return data;
+		}
+		catch (IOException e) {
+			LOGGER.error("error reading from file '{}' ({})", fileName, e.getMessage());
+		}
+		return null;
+	}
+
+	public static boolean writeFile(String fileName, byte[] data) {
+		LOGGER.info("writing to output file '{}'", fileName);
+		try {
+			FileUtils.writeByteArrayToFile(new File(fileName), data);
+			return true;
+		}
+		catch (IOException e) {
+
+		}
+		return false;
+	}
+
 	public static void main(String[] args) {
 		try {
 			parseCommandLine(args);
@@ -118,31 +142,51 @@ public class Main {
 			LOGGER.info("encrypt");
 			Encrypt encrypt = new Encrypt();
 
-			// read public key
-			try {
-				String publicKeyFileName = getCommandLine().getOptionValue("key");
-				LOGGER.info("reading public key: {}", publicKeyFileName);
-				encrypt.setPublicKey(FileUtils.readFileToByteArray(new File(publicKeyFileName)));
-			}
-			catch (IOException e) {
-				LOGGER.error("error reading public key ({})", e.getMessage());
-				System.exit(1);
-			}
+			// read and set public key
+			LOGGER.info("reading public key");
+			String publicKeyFileName = getCommandLine().getOptionValue("key");
+			byte[] publicKeyData = readFile(publicKeyFileName);
+			LOGGER.info("setting public key");
+			encrypt.setPublicKey(publicKeyData);
+
+			// read input
+			LOGGER.info("reading input");
+			String inputFileName = getCommandLine().getOptionValue("input");
+			byte[] inputData = readFile(inputFileName);
+
+			// encrypt
+			LOGGER.info("encrypting");
+			byte[] outputData = encrypt.encrypt(inputData);
+
+			// write output
+			LOGGER.info("writing output");
+			String outputFileName = getCommandLine().getOptionValue("output");
+			writeFile(outputFileName, outputData);
 		}
 		else if (getCommandLine().hasOption("decrypt")) {
 			LOGGER.info("decrypt");
 			Decrypt decrypt = new Decrypt();
 
-			// read private key
-			try {
-				String privateKeyFileName = getCommandLine().getOptionValue("key");
-				LOGGER.info("reading private key: {}", privateKeyFileName);
-				decrypt.setPrivateKey(FileUtils.readFileToByteArray(new File(privateKeyFileName)));
-			}
-			catch (IOException e) {
-				LOGGER.error("error reading private key ({})", e.getMessage());
-				System.exit(1);
-			}
+			// read and set private key
+			LOGGER.info("reading private key");
+			String privateKeyFileName = getCommandLine().getOptionValue("key");
+			byte[] privateKeyData = readFile(privateKeyFileName);
+			LOGGER.info("setting private key");
+			decrypt.setPrivateKey(privateKeyData);
+
+			// read input
+			LOGGER.info("reading input");
+			String inputFileName = getCommandLine().getOptionValue("input");
+			byte[] inputData = readFile(inputFileName);
+
+			// decrypt
+			LOGGER.info("decrypting");
+			byte[] outputData = decrypt.decrypt(inputData);
+
+			// write output
+			LOGGER.info("writing output");
+			String outputFileName = getCommandLine().getOptionValue("output");
+			writeFile(outputFileName, outputData);
 		}
 		else {
 			LOGGER.error("missing --encrypt or --decrypt");

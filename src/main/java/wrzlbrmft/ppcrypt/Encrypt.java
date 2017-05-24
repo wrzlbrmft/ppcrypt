@@ -3,6 +3,11 @@ package wrzlbrmft.ppcrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -33,5 +38,22 @@ public class Encrypt {
 			LOGGER.error("error setting public key ({})", e.getMessage());
 		}
 		return false;
+	}
+
+	public byte[] encrypt(byte[] data) {
+		try {
+			Cipher cipher = Cipher.getInstance("RSA");
+			cipher.init(Cipher.ENCRYPT_MODE, getPublicKey());
+			return cipher.doFinal(data);
+		}
+		catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
+			LOGGER.error("error on cipher init ()", e.getMessage());
+			System.exit(1);
+		}
+		catch (IllegalBlockSizeException | BadPaddingException e) {
+			LOGGER.error("error on encryption ({})", e.getMessage());
+			System.exit(1);
+		}
+		return null;
 	}
 }
