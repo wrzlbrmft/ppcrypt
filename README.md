@@ -1,6 +1,6 @@
 # ppcrypt
 
-...
+POC for public/private key encryption/decryption using RSA cryptography.
 
 ## Build Instructions
 
@@ -56,7 +56,8 @@ The public-key will be stored in `public.der`, the private-key in `private.der`.
 
 ### Encrypt
 
-To encrypt a message stored in `message.txt` into `secret.txt` using the public key, run:
+To encrypt a message stored in `message.txt` into `secret.txt` using the
+public-key, run:
 
 ```
 java -jar ppcrypt.jar --encrypt --key public.der --input message.txt --output secret.txt
@@ -70,7 +71,8 @@ java -jar ppcrypt.jar -e -k public.der -i message.txt -o secret.txt
 
 ### Decrypt
 
-To decrypt a secret stored in `secret.txt` back to `revealed.txt` using the private key, run:
+To decrypt a secret stored in `secret.txt` back to `revealed.txt` using the
+private-key, run:
 
 ```
 java -jar ppcrypt.jar --decrypt --key private.der --input secret.txt --output revealed.txt
