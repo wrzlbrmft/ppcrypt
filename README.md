@@ -1,6 +1,6 @@
 # ppcrypt
 
-Public/private key encryption/decryption using the RSA cryptosystem.
+Public/private key encryption/decryption demo using the RSA cryptosystem.
 
 ## Build Instructions
 
@@ -43,13 +43,12 @@ All available options are:
 
 ### Generate RSA Key-pair
 
-To generate a 4096-bit RSA key-pair, run:
+To generate a 1024-bit RSA key-pair, run:
 
 ```
-openssl genrsa -out private.pem 4096
+openssl genrsa -out private.pem 1024
 openssl pkcs8 -topk8 -inform PEM -outform DER -in private.pem -out private.der -nocrypt
 openssl rsa -in private.pem -pubout -outform DER -out public.der
-
 ```
 
 The public-key will be stored in `public.der`, the private-key in `private.der`.
