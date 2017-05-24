@@ -104,18 +104,20 @@ public class Main {
 		}
 		catch (IOException e) {
 			LOGGER.error("error reading from file '{}' ({})", fileName, e.getMessage());
+			System.exit(1);
 		}
 		return null;
 	}
 
 	public static boolean writeFile(String fileName, byte[] data) {
-		LOGGER.info("writing to output file '{}'", fileName);
+		LOGGER.info("writing to file '{}'", fileName);
 		try {
 			FileUtils.writeByteArrayToFile(new File(fileName), data);
 			return true;
 		}
 		catch (IOException e) {
-
+			LOGGER.error("error writing to file '{}' ({})", fileName, e.getMessage());
+			System.exit(1);
 		}
 		return false;
 	}

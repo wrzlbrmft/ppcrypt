@@ -36,6 +36,7 @@ public class Decrypt {
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			LOGGER.error("error setting private-key ({})", e.getMessage());
+			System.exit(1);
 		}
 		return false;
 	}

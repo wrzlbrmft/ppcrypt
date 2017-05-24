@@ -36,6 +36,7 @@ public class Encrypt {
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			LOGGER.error("error setting public-key ({})", e.getMessage());
+			System.exit(1);
 		}
 		return false;
 	}
