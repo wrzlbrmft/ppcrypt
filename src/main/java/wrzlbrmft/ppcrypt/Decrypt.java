@@ -35,7 +35,7 @@ public class Decrypt {
 			return true;
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			LOGGER.error("error setting private key ({})", e.getMessage());
+			LOGGER.error("error setting private-key ({})", e.getMessage());
 		}
 		return false;
 	}
@@ -51,7 +51,7 @@ public class Decrypt {
 			System.exit(1);
 		}
 		catch (IllegalBlockSizeException | BadPaddingException e) {
-			LOGGER.error("error on encryption ({})", e.getMessage());
+			LOGGER.error("error on decryption ({})", e.getMessage());
 			System.exit(1);
 		}
 		return null;

@@ -57,14 +57,14 @@ public class Main {
 
 		options.addOption(Option.builder("k")
 			.longOpt("key")
-			.desc("public/private key file for encryption/decryption")
+			.desc("public-/private-key file for encryption/decryption")
 			.hasArg()
 			.argName("file")
 			.build()
 		);
 
 		options.addOption(Option.builder("i")
-			.longOpt("in")
+			.longOpt("input")
 			.desc("input file")
 			.hasArg()
 			.argName("file")
@@ -72,7 +72,7 @@ public class Main {
 		);
 
 		options.addOption(Option.builder("o")
-			.longOpt("out")
+			.longOpt("output")
 			.desc("output file")
 			.hasArg()
 			.argName("file")
@@ -142,11 +142,11 @@ public class Main {
 			LOGGER.info("encrypt");
 			Encrypt encrypt = new Encrypt();
 
-			// read and set public key
-			LOGGER.info("reading public key");
+			// read and set public-key
+			LOGGER.info("reading public-key");
 			String publicKeyFileName = getCommandLine().getOptionValue("key");
 			byte[] publicKeyData = readFile(publicKeyFileName);
-			LOGGER.info("setting public key");
+			LOGGER.info("setting public-key");
 			encrypt.setPublicKey(publicKeyData);
 
 			// read input
@@ -167,11 +167,11 @@ public class Main {
 			LOGGER.info("decrypt");
 			Decrypt decrypt = new Decrypt();
 
-			// read and set private key
-			LOGGER.info("reading private key");
+			// read and set private-key
+			LOGGER.info("reading private-key");
 			String privateKeyFileName = getCommandLine().getOptionValue("key");
 			byte[] privateKeyData = readFile(privateKeyFileName);
-			LOGGER.info("setting private key");
+			LOGGER.info("setting private-key");
 			decrypt.setPrivateKey(privateKeyData);
 
 			// read input
