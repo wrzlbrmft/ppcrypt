@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Main {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Main.class);
@@ -44,21 +45,37 @@ public class Main {
 			.build()
 		);
 
+		options.addOption(Option.builder("e")
+			.longOpt("encrypt")
+			.build()
+		);
+
+		options.addOption(Option.builder("d")
+			.longOpt("decrypt")
+			.build()
+		);
+
 		options.addOption(Option.builder("k")
 			.longOpt("key")
 			.desc("public/private key file for encryption/decryption")
+			.hasArg()
+			.argName("file")
 			.build()
 		);
 
 		options.addOption(Option.builder("i")
 			.longOpt("in")
 			.desc("input file")
+			.hasArg()
+			.argName("file")
 			.build()
 		);
 
 		options.addOption(Option.builder("o")
 			.longOpt("out")
 			.desc("output file")
+			.hasArg()
+			.argName("file")
 			.build()
 		);
 
@@ -97,6 +114,41 @@ public class Main {
 			System.exit(1);
 		}
 
-		LOGGER.info("Hello World!");
+		if (getCommandLine().hasOption("encrypt")) {
+			LOGGER.info("encrypt");
+			Encrypt encrypt = new Encrypt();
+
+			// read public key
+			try {
+				String publicKeyFileName = getCommandLine().getOptionValue("key");
+				LOGGER.info("reading public key: {}", publicKeyFileName);
+				encrypt.setPublicKey(FileUtils.readFileToByteArray(new File(publicKeyFileName)));
+			}
+			catch (IOException e) {
+				LOGGER.error("error reading public key ({})", e.getMessage());
+				System.exit(1);
+			}
+		}
+		else if (getCommandLine().hasOption("decrypt")) {
+			LOGGER.info("decrypt");
+			Decrypt decrypt = new Decrypt();
+
+			// read private key
+			try {
+				String privateKeyFileName = getCommandLine().getOptionValue("key");
+				LOGGER.info("reading private key: {}", privateKeyFileName);
+				decrypt.setPrivateKey(FileUtils.readFileToByteArray(new File(privateKeyFileName)));
+			}
+			catch (IOException e) {
+				LOGGER.error("error reading private key ({})", e.getMessage());
+				System.exit(1);
+			}
+		}
+		else {
+			LOGGER.error("missing --encrypt or --decrypt");
+			System.exit(1);
+		}
+
+		System.exit(0);
 	}
 }
