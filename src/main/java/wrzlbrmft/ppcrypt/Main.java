@@ -155,7 +155,7 @@ public class Main {
 			byte[] inputData = readFile(inputFileName);
 
 			// encrypt
-			LOGGER.info("encrypting");
+			LOGGER.info("encrypting...");
 			byte[] outputData = encrypt.encrypt(inputData);
 
 			// write output
@@ -180,7 +180,7 @@ public class Main {
 			byte[] inputData = readFile(inputFileName);
 
 			// decrypt
-			LOGGER.info("decrypting");
+			LOGGER.info("decrypting...");
 			byte[] outputData = decrypt.decrypt(inputData);
 
 			// write output

@@ -1,6 +1,6 @@
 # ppcrypt
 
-POC for public/private key encryption/decryption using RSA cryptography.
+Public/private key encryption/decryption using the RSA cryptosystem.
 
 ## Build Instructions
 

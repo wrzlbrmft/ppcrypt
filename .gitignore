@@ -1,2 +1,7 @@
 .idea/
 target/
+private.der
+private.pem
+public.der
+revealed.txt
+secret.txt
