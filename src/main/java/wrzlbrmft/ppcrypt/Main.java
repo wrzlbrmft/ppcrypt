@@ -9,14 +9,20 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class Main {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
+	private final static String PROPERTIES_ENTRY_FILE_NAME = "META-INF/main.properties";
+	private final static Properties PROPERTIES = new Properties();
 
 	protected static CommandLine commandLine;
 
@@ -26,6 +32,34 @@ public class Main {
 
 	public static void setCommandLine(CommandLine commandLine) {
 		Main.commandLine = commandLine;
+	}
+
+	public static boolean loadProperties() {
+		InputStream inputStream = null;
+		try {
+			inputStream = Main.class.getResourceAsStream("/" + PROPERTIES_ENTRY_FILE_NAME);
+			PROPERTIES.load(inputStream);
+			return true;
+		}
+		catch (IOException e) {
+			LOGGER.error("error loading properties ({})", e.getMessage());
+		}
+		finally {
+			IOUtils.closeQuietly(inputStream);
+		}
+		return false;
+	}
+
+	public static String getAppName() {
+		return PROPERTIES.getProperty("app.name");
+	}
+
+	public static String getAppVersion() {
+		return PROPERTIES.getProperty("app.version");
+	}
+
+	public static String getVersionInfo() {
+		return getAppName() + " " + getAppVersion();
 	}
 
 	public static File getFile() {
@@ -42,6 +76,12 @@ public class Main {
 		options.addOption(Option.builder("h")
 			.longOpt("help")
 			.desc("print this help message and exit")
+			.build()
+		);
+
+		options.addOption(Option.builder("v")
+			.longOpt("version")
+			.desc("print version info and exit")
 			.build()
 		);
 
@@ -84,7 +124,7 @@ public class Main {
 
 	public static void parseCommandLine(String[] args) throws ParseException {
 		CommandLineParser commandLineParser = new DefaultParser();
-		setCommandLine(commandLineParser.parse(Main.getOptions(), args));
+		setCommandLine(commandLineParser.parse(getOptions(), args));
 	}
 
 	public static String getCommandLineSyntax() {
@@ -96,6 +136,10 @@ public class Main {
 		helpFormatter.printHelp(getCommandLineSyntax(), getOptions(), true);
 	}
 
+	public static void printVersionInfo() {
+		System.out.println(getVersionInfo());
+	}
+
 	public static byte[] readFile(String fileName) {
 		LOGGER.info("reading from file '{}'", fileName);
 		try {
@@ -104,7 +148,6 @@ public class Main {
 		}
 		catch (IOException e) {
 			LOGGER.error("error reading from file '{}' ({})", fileName, e.getMessage());
-			System.exit(1);
 		}
 		return null;
 	}
@@ -117,12 +160,13 @@ public class Main {
 		}
 		catch (IOException e) {
 			LOGGER.error("error writing to file '{}' ({})", fileName, e.getMessage());
-			System.exit(1);
 		}
 		return false;
 	}
 
 	public static void main(String[] args) {
+		loadProperties();
+
 		try {
 			parseCommandLine(args);
 
@@ -132,6 +176,10 @@ public class Main {
 			}
 			else if (getCommandLine().hasOption("help")) {
 				printHelpMessage();
+				System.exit(0);
+			}
+			else if (getCommandLine().hasOption("version")) {
+				printVersionInfo();
 				System.exit(0);
 			}
 		}
