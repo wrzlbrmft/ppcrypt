@@ -1,5 +1,7 @@
 # ppcrypt
 
+[![Build Status](https://travis-ci.org/wrzlbrmft/ppcrypt.svg?branch=master)](https://travis-ci.org/wrzlbrmft/ppcrypt)
+
 Public/private key encryption/decryption demo using the RSA cryptosystem.
 
 ## Build Instructions
