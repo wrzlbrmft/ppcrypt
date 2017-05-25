@@ -39,6 +39,7 @@ All available options are:
  -i,--input <file>    input file
  -k,--key <file>      public-/private-key file for encryption/decryption
  -o,--output <file>   output file
+ -v,--version         print version info and exit
 ```
 
 ### Generate RSA Key-pair
